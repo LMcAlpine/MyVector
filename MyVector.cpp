@@ -1,18 +1,16 @@
 #include <iostream>
 #include "MyVector.h"
 
-MyVector::MyVector() : capacity(4), size(0)
+MyVector::MyVector() : capacity(4), size(0), list(new int[capacity])
 {
-    MyVector::list = new int[capacity];
 }
 
 void MyVector::insert(int item, int index)
 {
 
-    if (index < 0)
+    if (index < 0 || index > MyVector::size)
     {
-        std::cout << "Index out of bounds" << std::endl;
-        return;
+        throw std::runtime_error("Out of bounds when index is: " + std::to_string(index));
     }
     if (MyVector::size == MyVector::capacity)
     {
@@ -22,16 +20,15 @@ void MyVector::insert(int item, int index)
     if (index <= MyVector::size)
     {
 
+        // std::cout << "size before " << size << "\n";
+        // std::cout << "index before " << index << "\n";
+        // std::cout << "\n";
+
         MyVector::list[index] = item;
         MyVector::size++;
-        std::cout << "size " << size << "\n";
-        std::cout << "index " << index << "\n";
-        std::cout << "\n";
-    }
-    else
-    {
-        std::cout << "error when size is " << size << " index of " << index << std::endl;
-        return;
+        // std::cout << "size after " << size << "\n";
+        // std::cout << "index after " << index << "\n";
+        // std::cout << "\n";
     }
 }
 
@@ -74,6 +71,11 @@ MyVector::~MyVector()
 int main()
 {
 
+    // logic error in insert but where?
+    // try catch , exception
+    // throw anything
+    // typically want to throw a pointer
+
     // my process with insert was to first just get one item inserted
     // then it was to try adding elements out of range
     // this worked initially but it was evaluating an unsigned integer vs signed integer which was causing size to be incremented even though nothing was added (in what I could see with my print function)
@@ -85,21 +87,97 @@ int main()
     //  // i < size not i < capacity because then it will access memory in list that is not in bounds
     // that is why when I was printing list that it had random values that I didnt add.
 
-    MyVector myVector = MyVector();
-    // myVector.insert(1, -1);
-    // myVector.insert(4, 15);
-
-    // myVector.insert(17, 17);
-    for (int i = 0; i < 4; i++)
+    try
     {
-        myVector.insert(i + 1, i);
-    }
-    myVector.print();
-    myVector.insert(1, -1);
-    myVector.print();
-    myVector.insert(5, 4);
-    myVector.print();
-    myVector.insert(17, 17);
 
-    myVector.print();
+        MyVector myVector = MyVector();
+        // myVector.insert(1, -1);
+        // myVector.insert(4, 15);
+
+        // myVector.insert(17, 17);
+        for (int i = 0; i < 4; i++)
+        {
+            myVector.insert(i + 1, i);
+            myVector.print();
+        }
+        myVector.print();
+
+        myVector.insert(9, 20);
+
+        myVector.print();
+    }
+    catch (const std::runtime_error &ex)
+    {
+        std::cerr << ex.what() << '\n';
+        // std::cout << "Caught exception: " << ex.what() << '\n';
+    }
+
+    // myVector.insert(1, -1);
+    // myVector.print();
+    // myVector.insert(5, 4);
+    // myVector.print();
+    // myVector.insert(17, 17);
+
+    // insert that will require a shift
+    // logic error when replacing an index right now because it increases the size even though an extra element is not added
+    // but now how do I shift elements?
+    // how do I tell if an index is already occupied by an element?
+    // maybe, if the size is greater than the index you want to put an element then you know its occupied..?
+    // so, then shift each element by one
+    // then insert the new element at the index
+    // what if you shift each element by 1 and it is goes out of bounds?
+
+    // x
+    // 1 2 3 4 5 0 0 0 0
+    // 1 2 3 4 _ 5 0 0 0
+    // start at the last inserted element
+    // size-1?
+    // 1 2 3 _ 4 5 0 0 0
+    // 1 2 _ 3 4 5 0 0 0
+    // 1 _ 2 3 4 5 0 0 0
+    // _ 1 2 3 4 5 0 0 0
+    // insert
+    // 9 1 2 3 4 5 0 0 0
+
+    // for i = size -1; i > capacity; i--
+    //      move the element one space forward
+
+    // does that work?
+    // size = 3, capacity = 6
+    // x
+    // 1 2 3 _ _ _
+    // i = 2, i > 6
+    // oh, this above loop is wrong
+    //
+    // for i = size-1; i < capacity; i++
+    // move element one space forward
+
+    // x
+    // 1 2 3
+    // i = 2, i < 6; i++
+
+    //  1 2 _ 3 _ _
+    // i = 3, i < 6; i++
+    //  1 _ 2 3 __
+    // no, this is wrong too because its not accessing the right indices
+
+    // I want to go from right to left in the array
+    // oh from size-1 > 0
+    // for i - size-1; i > 0; i--
+    // x
+    // 1 2 3
+    // i = 2; i >= 0; i--
+    // 1 2 _ 3 _ _
+    // i = 1; i >= 0; i--
+    // 1 _ 2 3 _ _
+    // i = 0; i >= 0; i--
+    // _ 1 2 3 _ _
+    // insert item
+    // 9 1 2 3 _ _
+    // what if the shift goes all the way to the end and then an item is lost?
+    // will this happen? or will it resize?
+
+    // myVector.insert(9, 0);
+
+    // myVector.print();
 }
