@@ -20,20 +20,53 @@ void MyVector::insert(int item, int index)
     // here the index must be less than or equal to size
     // but how do I know if I need to do a shift?
     // if index==size?
+
+    // can I reduce this so I dont have to have list[index]=item twice?
+
+    // if a shift is needed then perform it. Loops does not run if no shift needed
+    for (int i = size - 1; i >= index; i--)
+    {
+        list[i] = list[i - 1];
+    }
+    list[index] = item;
     size++;
-    if (index == size)
-    {
-        list[index] = item;
-    }
-    else
-    {
-        // now the index must be less than size so it is going to require a shift
-        for (int i = size - 1; i >= index; i--)
-        {
-            list[i + 1] = list[i];
-        }
-        list[index] = item;
-    }
+
+    // 0 0 0 0
+    // size = 0;
+    // i = size-1; !!! X need to change to just i = size
+    // 1 0 0 0
+
+    // 0 0 0 0
+    // size = 0
+    // i = size
+    // i >= 0
+    // no change it from >= to >
+
+    // 0 0 0 0
+    // size = 0
+    // i = size
+    // i > 0
+    // loop doesnt run
+    // 1 0 0 0
+    // size = 1
+
+    // size = 1
+    // 1 0 0 0
+    // i = size
+    // i > 1
+    // loop doesnt run
+    // 1 2 0 0
+
+    // size = 2
+    // index = 0
+    // i = size
+    // i > 0
+    // loop runs
+    // 1 _ 2 0
+    // _ 1 2 0
+    // list[i]=list[i-1]
+
+    // this is how i can remove the if and else because the loop wont run if you are adding the first elements
 }
 
 void MyVector::resize()
@@ -103,27 +136,52 @@ int main()
     {
 
         MyVector myVector = MyVector();
+
+        // insert 1
+        // myVector.insert(0, 0);
+        // myVector.insert(1, 1);
+        // myVector.insert(2, 2);
+        // myVector.print();
+
+        // insert 2
+        //  myVector.insert(0, 2);
+        //  myVector.insert(1, 1);
+        //  myVector.insert(2, 0);
+        // myVector.print();
+
+        // index in bound
+        // myVector.insert(1, 0);
+        // myVector.print();
+
+        // out of bound positive
+        // myVector.insert(1, 1);
+        // myVector.print();
+
+        // out of bound negative
+        // myVector.insert(1, -1);
+        // myVector.print();
+
         //  myVector.insert(1, -1);
         // myVector.insert(4, 15);
 
         //  myVector.insert(17, 17);
-        for (int i = 0; i < 4; i++)
-        {
-            myVector.insert(i + 1, i);
-            myVector.print();
-        }
-        myVector.print();
+        // for (int i = 0; i < 4; i++)
+        // {
+        //     myVector.insert(i + 1, i);
+        //     myVector.print();
+        // }
+        // myVector.print();
         // bug here when inserting an element at the index of size-1
         // this is because it is doubling the capacity but not shifting any elements yet.
         // So the size is increased by one but there are still only 4 elements not 5
-        myVector.insert(5, 3);
-        myVector.print();
+        // myVector.insert(5, 3);
+        // myVector.print();
 
-        myVector.insert(INT_MAX, 0);
+        // myVector.insert(INT_MAX, 0);
 
         // myVector.insert(9, 20);
 
-        myVector.print();
+        // myVector.print();
     }
     catch (const std::runtime_error &ex)
     {
