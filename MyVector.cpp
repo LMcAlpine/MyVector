@@ -1,4 +1,5 @@
 #include <iostream>
+#include <limits.h>
 #include "MyVector.h"
 
 MyVector::MyVector() : capacity(4), size(0), list(new int[capacity])
@@ -8,40 +9,37 @@ MyVector::MyVector() : capacity(4), size(0), list(new int[capacity])
 void MyVector::insert(int item, int index)
 {
 
-    if (index < 0 || index > MyVector::size)
+    if (index < 0 || index > size)
     {
         throw std::runtime_error("Out of bounds when index is: " + std::to_string(index));
     }
-    if (MyVector::size == MyVector::capacity)
+    if (size == capacity)
     {
         resize();
     }
-
-    if (index <= MyVector::size)
+    // here the index must be less than or equal to size
+    // but how do I know if I need to do a shift?
+    // if index==size?
+    size++;
+    if (index == size)
     {
-
-        // std::cout << "size before " << size << "\n";
-        // std::cout << "index before " << index << "\n";
-        // std::cout << "\n";
-
-        MyVector::list[index] = item;
-        MyVector::size++;
-        // std::cout << "size after " << size << "\n";
-        // std::cout << "index after " << index << "\n";
-        // std::cout << "\n";
+        list[index] = item;
+    }
+    else
+    {
+        // now the index must be less than size so it is going to require a shift
+        for (int i = size - 1; i >= index; i--)
+        {
+            list[i + 1] = list[i];
+        }
+        list[index] = item;
     }
 }
 
 void MyVector::resize()
 {
-    MyVector::capacity = capacity * 2;
-    int *temp = new int[MyVector::capacity];
-
-    // is this necessary?
-    for (size_t i = 0; i < capacity; i++)
-    {
-        temp[i] = 0;
-    }
+    capacity = capacity * 2;
+    int *temp = new int[capacity];
 
     // i < size not i < capacity because then it will access memory in list that is not in bounds
     for (size_t i = 0; i < size; i++)
@@ -49,8 +47,8 @@ void MyVector::resize()
         temp[i] = MyVector::list[i];
     }
 
-    delete[] MyVector::list;
-    MyVector::list = temp;
+    delete[] list;
+    list = temp;
 }
 
 void MyVector::print()
@@ -58,14 +56,14 @@ void MyVector::print()
 
     for (int i = 0; i < capacity; i++)
     {
-        std::cout << MyVector::list[i] << " ";
+        std::cout << list[i] << " ";
     }
     std::cout << "\n";
 }
 
 MyVector::~MyVector()
 {
-    delete[] MyVector::list;
+    delete[] list;
 }
 
 int main()
@@ -87,29 +85,49 @@ int main()
     //  // i < size not i < capacity because then it will access memory in list that is not in bounds
     // that is why when I was printing list that it had random values that I didnt add.
 
+    // I had redundant code by having a check of if index > size
+    // and then later if index <= size
+
+    // test for
+    // add value at end
+    // add value when size is filled to capacity
+    // add value at size
+    // add value at the first index
+    // add value at an index greater than the size
+    // add value at an index one greater than the size
+    // add value at an index one less than the size
+    // add value when size is one less than capacity
+    // add value when size is greater than capacity
+    // add value when size is less than index
     try
     {
 
         MyVector myVector = MyVector();
-        // myVector.insert(1, -1);
+        //  myVector.insert(1, -1);
         // myVector.insert(4, 15);
 
-        // myVector.insert(17, 17);
+        //  myVector.insert(17, 17);
         for (int i = 0; i < 4; i++)
         {
             myVector.insert(i + 1, i);
             myVector.print();
         }
         myVector.print();
+        // bug here when inserting an element at the index of size-1
+        // this is because it is doubling the capacity but not shifting any elements yet.
+        // So the size is increased by one but there are still only 4 elements not 5
+        myVector.insert(5, 3);
+        myVector.print();
 
-        myVector.insert(9, 20);
+        myVector.insert(INT_MAX, 0);
+
+        // myVector.insert(9, 20);
 
         myVector.print();
     }
     catch (const std::runtime_error &ex)
     {
         std::cerr << ex.what() << '\n';
-        // std::cout << "Caught exception: " << ex.what() << '\n';
     }
 
     // myVector.insert(1, -1);
