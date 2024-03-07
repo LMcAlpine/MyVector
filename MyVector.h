@@ -14,6 +14,7 @@ public:
     ~MyVector();
 
     void insert(int item, int index);
+    int remove(int index);
 
 void resize();
 

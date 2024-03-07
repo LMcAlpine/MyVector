@@ -25,8 +25,34 @@ void MyVector::insert(int item, int index)
     }
     list[index] = item;
     size++;
+}
 
+int MyVector::remove(int index)
+{
+    if (index < 0 || index >= size)
+    {
+        throw std::runtime_error("Out of bounds when index is: " + std::to_string(index));
+    }
 
+    if (index == size - 1)
+    {
+        size--;
+        return index;
+    }
+
+    // 1 2 3 4 5
+    // remove item at index 2
+    // 1 2 4 5
+    // list[index] = list[index+1]
+    // from index to size?
+
+    // to shift go from the size down to the index being removed
+    for (int i = index; i < size; i++)
+    {
+        list[i] = list[i + 1];
+    }
+    size--;
+    return index;
 }
 
 void MyVector::resize()
@@ -46,8 +72,12 @@ void MyVector::resize()
 
 void MyVector::print()
 {
+    if (size == 0)
+    {
+        std::cout << "[]";
+    }
 
-    for (size_t i = 0; i < capacity; i++)
+    for (size_t i = 0; i < size; i++)
     {
         std::cout << list[i] << " ";
     }
@@ -68,23 +98,30 @@ int main()
         MyVector myVector = MyVector();
 
         myVector.insert(1, 0);
-        myVector.insert(4, 0);
-        myVector.insert(4, 0);
-        myVector.insert(4, 0);
-        myVector.insert(4, 0);
-        myVector.insert(4, 0);
-
         myVector.insert(2, 1);
         myVector.insert(3, 2);
         myVector.insert(4, 3);
-        myVector.print();
-        myVector.insert(5, 3);
+        myVector.insert(5, 4);
         myVector.print();
 
+        myVector.remove(0);
+        myVector.print();
+        myVector.remove(1);
+        myVector.print();
+        myVector.remove(2);
+        myVector.print();
+        //  myVector.remove(3);
+        //  myVector.print();
+        //  myVector.remove(4);
+        //  myVector.print();
+
+        myVector.remove(1);
+        myVector.print();
+        myVector.remove(0);
+        myVector.print();
     }
     catch (const std::runtime_error &ex)
     {
         std::cerr << ex.what() << '\n';
     }
-
 }
