@@ -1,4 +1,4 @@
-//template <class T>
+// template <class T>
 class MyVector
 {
 private:
@@ -15,8 +15,9 @@ public:
 
     void insert(int item, int index);
     int remove(int index);
+    bool contains(int item);
 
-void resize();
+    void resize();
 
     void print();
 };

@@ -55,6 +55,18 @@ int MyVector::remove(int index)
     return index;
 }
 
+bool MyVector::contains(int item)
+{
+    for (size_t i = 0; i < size; i++)
+    {
+        if (list[i] == item)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 void MyVector::resize()
 {
     capacity = capacity * 2;
@@ -104,21 +116,86 @@ int main()
         myVector.insert(5, 4);
         myVector.print();
 
+        std::cout << "\ncontains:\n"
+                  << std::endl;
+
+        bool result = myVector.contains(1);
+        std::cout << result << std::endl;
+        result = myVector.contains(2);
+        std::cout << result << std::endl;
+        result = myVector.contains(3);
+        std::cout << result << std::endl;
+        result = myVector.contains(4);
+        std::cout << result << std::endl;
+        result = myVector.contains(5);
+        std::cout << result << std::endl;
+
+        std::cout << "end\n"
+                  << std::endl;
+
         myVector.remove(0);
         myVector.print();
+
+        std::cout << "\ncontains after removal:\n"
+                  << std::endl;
+        result = myVector.contains(1);
+        std::cout << result << std::endl;
+
+        std::cout << "end"
+                  << std::endl;
+
         myVector.remove(1);
         myVector.print();
+
+        std::cout << "\ncontains after removal:\n"
+                  << std::endl;
+        result = myVector.contains(3);
+        std::cout << result << std::endl;
+
+        std::cout << "end"
+                  << std::endl;
         myVector.remove(2);
+
+        std::cout << "\ncontains after removal"
+                  << std::endl;
+        result = myVector.contains(5);
+        std::cout << result << std::endl;
+
+        std::cout << "end"
+                  << std::endl;
+
         myVector.print();
         //  myVector.remove(3);
         //  myVector.print();
         //  myVector.remove(4);
         //  myVector.print();
+        // bool result = myVector.contains(500);
+        // std::cout << result << std::endl;
 
         myVector.remove(1);
+
+        std::cout << "\ncontains after removal"
+                  << std::endl;
+        result = myVector.contains(4);
+        std::cout << result << std::endl;
+
+        std::cout << "end"
+                  << std::endl;
+
         myVector.print();
         myVector.remove(0);
+
+        std::cout << "\ncontains after removal"
+                  << std::endl;
+        result = myVector.contains(2);
+        std::cout << result << std::endl;
+
+        std::cout << "end"
+                  << std::endl;
         myVector.print();
+
+        result = myVector.contains(1);
+        std::cout << result << std::endl;
     }
     catch (const std::runtime_error &ex)
     {
