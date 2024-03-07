@@ -1,2 +1,5 @@
 myvector
 *.vscode
+*googletest
+CMakeLists.txt
+MyVectorTest.cpp
