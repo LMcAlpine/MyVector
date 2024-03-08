@@ -3,3 +3,4 @@ myvector
 *googletest
 CMakeLists.txt
 MyVectorTest.cpp
+*build

@@ -17,6 +17,16 @@ public:
     int remove(int index);
     bool contains(int item);
 
+    int indexOf(int item);
+
+    int get(int index);
+
+    void set(int index, int item);
+
+    int getSize();
+
+    bool isEmpty();
+
     void resize();
 
     void print();
