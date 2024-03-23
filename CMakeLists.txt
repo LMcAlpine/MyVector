@@ -8,7 +8,7 @@ add_subdirectory(googletest)
 include_directories(googletest/include)
 
 # Add your test executable
-add_executable(myVectorTest MyVector.cpp MyVectorTest.cpp)
+add_executable(myVectorTest MyVector_impl.h MyVectorTest.cpp)
 
 # Link against Google Test
 target_link_libraries(myVectorTest PRIVATE gtest gtest_main)

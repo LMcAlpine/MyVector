@@ -1,8 +1,11 @@
-// template <class T>
+#ifndef _MYVECTOR_H_
+#define _MYVECTOR_H_
+
+template <typename T>
 class MyVector
 {
 private:
-    int *list;
+    T *list;
 
     // number of elements in the list
     int size;
@@ -13,15 +16,15 @@ public:
     MyVector();
     ~MyVector();
 
-    void insert(int item, int index);
+    void insert(T item, int index);
     int remove(int index);
-    bool contains(int item);
+    bool contains(T item);
 
-    int indexOf(int item);
+    int indexOf(T item);
 
     int get(int index);
 
-    void set(int index, int item);
+    void set(int index, T item);
 
     int getSize();
 
@@ -30,4 +33,14 @@ public:
     void resize();
 
     void print();
+
+    void clear()
+    {
+        delete[] list;
+        size = 0;
+        capacity = 16;
+        list = new T[capacity];
+    }
 };
+#include "MyVector_impl.h"
+#endif // _MYVECTOR_H_

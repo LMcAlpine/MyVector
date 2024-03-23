@@ -1,250 +1,267 @@
 #include <gtest/gtest.h>
 #include "MyVector.h"
+template <typename T>
+void insertTenItems(MyVector<T> &list);
+template <typename T>
+void insertTwentyItems(MyVector<T> &list);
+template <typename T>
+void insertTenItemsPlusFive(MyVector<T> &list);
 
-void insertTenItems(MyVector &list);
-
-void insertTwentyItems(MyVector &list);
-
-void insertTenItemsPlusFive(MyVector &list);
-
-TEST(myVectorTest, size_0)
+template <typename T>
+class myVectorTest : public ::testing::Test
 {
-    MyVector vec;
-    GTEST_ASSERT_EQ(0, vec.getSize());
+protected:
+    MyVector<T> vec;
+    void SetUp() override
+    {
+        vec.clear();
+    }
+
+    void TearDown() override {}
+};
+
+using MyVectorTypes = ::testing::Types<int>;
+
+TYPED_TEST_SUITE(myVectorTest, MyVectorTypes);
+
+TYPED_TEST(myVectorTest, size_0)
+{
+
+    GTEST_ASSERT_EQ(0, this->vec.getSize());
 }
 
-TEST(myVectorTest, size_1)
+TYPED_TEST(myVectorTest, size_1)
 {
-    MyVector vec;
-    vec.insert(1, 0);
-    GTEST_ASSERT_EQ(1, vec.getSize());
+
+    this->vec.insert(1, 0);
+    GTEST_ASSERT_EQ(1, this->vec.getSize());
 }
 
-TEST(myVectorTest, insert1)
+TYPED_TEST(myVectorTest, insert1)
 {
-    MyVector vec;
-    vec.insert(0, 0);
-    vec.insert(1, 1);
-    vec.insert(2, 2);
-    GTEST_ASSERT_EQ(0, vec.get(0));
-    GTEST_ASSERT_EQ(1, vec.get(1));
-    GTEST_ASSERT_EQ(2, vec.get(2));
-}
-TEST(myVectorTest, insert2)
-{
-    MyVector vec;
-    vec.insert(0, 0);
-    vec.insert(1, 1);
 
-    GTEST_ASSERT_EQ(0, vec.get(0));
-    GTEST_ASSERT_EQ(1, vec.get(1));
-    vec.insert(2, 0);
-    GTEST_ASSERT_EQ(2, vec.get(0));
+    this->vec.insert(0, 0);
+    this->vec.insert(1, 1);
+    this->vec.insert(2, 2);
+    GTEST_ASSERT_EQ(0, this->vec.get(0));
+    GTEST_ASSERT_EQ(1, this->vec.get(1));
+    GTEST_ASSERT_EQ(2, this->vec.get(2));
+}
+TYPED_TEST(myVectorTest, insert2)
+{
+
+    this->vec.insert(0, 0);
+    this->vec.insert(1, 1);
+
+    GTEST_ASSERT_EQ(0, this->vec.get(0));
+    GTEST_ASSERT_EQ(1, this->vec.get(1));
+    this->vec.insert(2, 0);
+    GTEST_ASSERT_EQ(2, this->vec.get(0));
     // vec.print();
 }
 
-TEST(myVectorTest, indexInBound)
+TYPED_TEST(myVectorTest, indexInBound)
 {
-    MyVector vec;
-    vec.insert(1, 0);
-    GTEST_ASSERT_EQ(1, vec.getSize());
+
+    this->vec.insert(1, 0);
+    GTEST_ASSERT_EQ(1, this->vec.getSize());
 }
 
-TEST(myVectorTest, indexOutOfBoundPositive)
+TYPED_TEST(myVectorTest, indexOutOfBoundPositive)
 {
-    MyVector vec;
-    vec.insert(1, 1);
-    GTEST_ASSERT_EQ(0, vec.getSize());
+
+    this->vec.insert(1, 1);
+    GTEST_ASSERT_EQ(0, this->vec.getSize());
 }
 
-TEST(myVectorTest, indexOutOfBoundNegative)
+TYPED_TEST(myVectorTest, indexOutOfBoundNegative)
 {
-    MyVector vec;
-    vec.insert(1, -1);
-    GTEST_ASSERT_EQ(0, vec.getSize());
+
+    this->vec.insert(1, -1);
+    GTEST_ASSERT_EQ(0, this->vec.getSize());
 }
 
-TEST(myVectorTest, resize)
+TYPED_TEST(myVectorTest, resize)
 {
-    MyVector vec;
-    insertTwentyItems(vec);
-    GTEST_ASSERT_EQ(20, vec.getSize());
+
+    insertTwentyItems(this->vec);
+    GTEST_ASSERT_EQ(20, this->vec.getSize());
 }
 
-TEST(myVectorTest, contains)
+TYPED_TEST(myVectorTest, contains)
 {
-    MyVector vec;
-    insertTenItems(vec);
+
+    insertTenItems(this->vec);
     for (int i = 0; i < 10; i++)
     {
-        GTEST_ASSERT_EQ(true, vec.contains(i));
+        GTEST_ASSERT_EQ(true, this->vec.contains(i));
     }
 }
 
-TEST(myVectorTest, notContain)
+TYPED_TEST(myVectorTest, notContain)
 {
-    MyVector vec;
-    insertTenItems(vec);
+
+    insertTenItems(this->vec);
     for (int i = 10; i < 20; i++)
     {
-        GTEST_ASSERT_EQ(false, vec.contains(i));
+        GTEST_ASSERT_EQ(false, this->vec.contains(i));
     }
 }
 
-TEST(myVectorTest, containsAfterExpand)
+TYPED_TEST(myVectorTest, containsAfterExpand)
 {
-    MyVector vec;
-    insertTwentyItems(vec);
+
+    insertTwentyItems(this->vec);
     for (int i = 0; i < 20; i++)
     {
-        GTEST_ASSERT_EQ(true, vec.contains(i));
+        GTEST_ASSERT_EQ(true, this->vec.contains(i));
     }
 }
 
-TEST(myVectorTest, notContainAfterExpand)
+TYPED_TEST(myVectorTest, notContainAfterExpand)
 {
-    MyVector vec;
-    insertTwentyItems(vec);
+
+    insertTwentyItems(this->vec);
     for (int i = 20; i < 40; i++)
     {
-        GTEST_ASSERT_EQ(false, vec.contains(i));
+        GTEST_ASSERT_EQ(false, this->vec.contains(i));
     }
 }
 
-TEST(myVectorTest, indexOfHasValue)
+TYPED_TEST(myVectorTest, indexOfHasValue)
 {
-    MyVector vec;
-    insertTenItemsPlusFive(vec);
+
+    insertTenItemsPlusFive(this->vec);
     for (int i = 0; i < 10; i++)
     {
-        GTEST_ASSERT_EQ(i, vec.indexOf(i + 5));
+        GTEST_ASSERT_EQ(i, this->vec.indexOf(i + 5));
     }
 }
 
-TEST(myVectorTest, indexOfValueNotFound)
+TYPED_TEST(myVectorTest, indexOfValueNotFound)
 {
-    MyVector vec;
-    insertTenItemsPlusFive(vec);
+
+    insertTenItemsPlusFive(this->vec);
     for (int i = 0; i < 5; i++)
     {
-        GTEST_ASSERT_EQ(-1, vec.indexOf(i));
+        GTEST_ASSERT_EQ(-1, this->vec.indexOf(i));
     }
     for (int i = 15; i < 20; i++)
     {
-        GTEST_ASSERT_EQ(-1, vec.indexOf(i));
+        GTEST_ASSERT_EQ(-1, this->vec.indexOf(i));
     }
 }
 
-TEST(myVectorTest, getInBound)
+TYPED_TEST(myVectorTest, getInBound)
 {
-    MyVector vec;
-    insertTenItems(vec);
+
+    insertTenItems(this->vec);
     for (int i = 0; i < 10; i++)
     {
-        GTEST_ASSERT_EQ(i, vec.get(i));
+        GTEST_ASSERT_EQ(i, this->vec.get(i));
     }
     // vec.print();
 }
 
-TEST(myVectorTest, getOutBound)
+TYPED_TEST(myVectorTest, getOutBound)
 {
-    MyVector vec;
-    insertTenItems(vec);
+
+    insertTenItems(this->vec);
     for (int i = -5; i < 0; i++)
     {
-        GTEST_ASSERT_EQ(0, vec.get(i));
+        GTEST_ASSERT_EQ(0, this->vec.get(i));
     }
     for (int i = 10; i < 15; i++)
     {
-        GTEST_ASSERT_EQ(0, vec.get(i));
+        GTEST_ASSERT_EQ(0, this->vec.get(i));
     }
     // vec.print();
 }
 
-TEST(myVectorTest, setInBound)
+TYPED_TEST(myVectorTest, setInBound)
 {
-    MyVector vec;
-    insertTenItems(vec);
-    vec.set(0, -1);
-    vec.set(2, -1);
-    vec.set(4, -1);
-    vec.set(6, -1);
-    vec.set(8, -1);
+
+    insertTenItems(this->vec);
+    this->vec.set(0, -1);
+    this->vec.set(2, -1);
+    this->vec.set(4, -1);
+    this->vec.set(6, -1);
+    this->vec.set(8, -1);
     for (int i = 0; i < 10; i++)
     {
         if (i % 2 == 0)
         {
-            GTEST_ASSERT_EQ(-1, vec.get(i));
+            GTEST_ASSERT_EQ(-1, this->vec.get(i));
         }
         else
         {
-            GTEST_ASSERT_EQ(i, vec.get(i));
+            GTEST_ASSERT_EQ(i, this->vec.get(i));
         }
     }
     // vec.print();
 }
 
-TEST(myVectorTest, setOutBound)
+TYPED_TEST(myVectorTest, setOutBound)
 {
-    MyVector vec;
-    insertTenItems(vec);
-    vec.set(-1, -1);
-    vec.set(-2, -1);
-    vec.set(-3, -1);
-    vec.set(10, -1);
-    vec.set(11, -1);
+
+    insertTenItems(this->vec);
+    this->vec.set(-1, -1);
+    this->vec.set(-2, -1);
+    this->vec.set(-3, -1);
+    this->vec.set(10, -1);
+    this->vec.set(11, -1);
     for (int i = 0; i < 10; i++)
     {
 
-        GTEST_ASSERT_EQ(i, vec.get(i));
+        GTEST_ASSERT_EQ(i, this->vec.get(i));
     }
 }
 
-TEST(myVectorTest, empty)
+TYPED_TEST(myVectorTest, empty)
 {
-    MyVector vec;
-    GTEST_ASSERT_EQ(true, vec.isEmpty());
+
+    GTEST_ASSERT_EQ(true, this->vec.isEmpty());
 }
 
-TEST(myVectorTest, notEmpty)
+TYPED_TEST(myVectorTest, notEmpty)
 {
-    MyVector vec;
-    vec.insert(1, 0);
-    GTEST_ASSERT_EQ(false, vec.isEmpty());
+
+    this->vec.insert(1, 0);
+    GTEST_ASSERT_EQ(false, this->vec.isEmpty());
 }
 
-TEST(myVectorTest, notEmptyTenItems)
+TYPED_TEST(myVectorTest, notEmptyTenItems)
 {
-    MyVector vec;
-    insertTenItems(vec);
-    GTEST_ASSERT_EQ(false, vec.isEmpty());
+
+    insertTenItems(this->vec);
+    GTEST_ASSERT_EQ(false, this->vec.isEmpty());
 }
 
-TEST(myVectorTest, notEmptyAfterResize)
+TYPED_TEST(myVectorTest, notEmptyAfterResize)
 {
-    MyVector vec;
-    insertTwentyItems(vec);
-    GTEST_ASSERT_EQ(false, vec.isEmpty());
+
+    insertTwentyItems(this->vec);
+    GTEST_ASSERT_EQ(false, this->vec.isEmpty());
 }
 // vec.print();
-
-void insertTenItems(MyVector &list)
+template <typename T>
+void insertTenItems(MyVector<T> &list)
 {
     for (int i = 0; i < 10; i++)
     {
         list.insert(i, i);
     }
 }
-
-void insertTwentyItems(MyVector &list)
+template <typename T>
+void insertTwentyItems(MyVector<T> &list)
 {
     for (int i = 0; i < 20; i++)
     {
         list.insert(i, i);
     }
 }
-
-void insertTenItemsPlusFive(MyVector &list)
+template <typename T>
+void insertTenItemsPlusFive(MyVector<T> &list)
 {
     for (int i = 0; i < 10; i++)
     {
