@@ -1,2 +1,4 @@
 myvector
 *.vscode
+*build
+*googletest
